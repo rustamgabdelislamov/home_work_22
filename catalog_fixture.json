@@ -1,0 +1,84 @@
+[
+{
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+        "name": "Samsung",
+        "description": "RAM 12 ГБ, память 456 ГБ",
+        "image": "",
+        "category": 1,
+        "price": 40000,
+        "created_at": "2025-09-08",
+        "updated_at": "2025-09-08T18:41:50.988Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+        "name": "LG",
+        "description": "QLED",
+        "image": "",
+        "category": 2,
+        "price": 100000,
+        "created_at": "2025-09-08",
+        "updated_at": "2025-09-08T18:44:11.267Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 4,
+    "fields": {
+        "name": "DELL",
+        "description": "QLED",
+        "image": "",
+        "category": 2,
+        "price": 120000,
+        "created_at": "2025-09-08",
+        "updated_at": "2025-09-08T18:46:29.695Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 5,
+    "fields": {
+        "name": "Nokia",
+        "description": "24 GB",
+        "image": "",
+        "category": 1,
+        "price": 30000,
+        "created_at": "2025-09-09",
+        "updated_at": "2025-09-08T19:17:49.105Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 6,
+    "fields": {
+        "name": "Iphone",
+        "description": "16GB",
+        "image": "catalog/image/apple-dunyasindan-son-gelismeler-5.jpg",
+        "category": 1,
+        "price": 150000,
+        "created_at": "2025-09-09",
+        "updated_at": "2025-09-08T19:21:19.553Z"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+        "name": "Телефоны",
+        "description": "Стильный внешний вид, ёмкий аккумулятор, большая оперативная память и производительный процессор"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+        "name": "Телевизоры",
+        "description": "Стильный внешний вид, лучшая цветопередача, большая оперативная память и производительный процессор"
+    }
+}
+
+]
