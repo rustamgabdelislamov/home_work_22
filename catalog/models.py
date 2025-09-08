@@ -74,3 +74,12 @@ class Contacts(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = "контакт"
+        verbose_name_plural = "контакты"
+        ordering = [
+            "name",
+            "email",
+        ]
+
