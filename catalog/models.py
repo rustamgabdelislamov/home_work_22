@@ -68,7 +68,6 @@ class Product(models.Model):
 
 class Contacts(models.Model):
     name = models.CharField(max_length=100)
-    email = models.EmailField()
     phone = models.CharField(max_length=20)
     message = models.TextField()
 
@@ -80,6 +79,4 @@ class Contacts(models.Model):
         verbose_name_plural = "контакты"
         ordering = [
             "name",
-            "email",
         ]
-
