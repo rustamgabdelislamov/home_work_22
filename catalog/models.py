@@ -31,4 +31,10 @@ class Product(models.Model):
         verbose_name_plural = 'продукты'
         ordering = ['name', 'category', 'price',]
 
-    # product1 = Product.objects.create(name='Infinix', description='RAM 8 ГБ, память 256 ГБ', )
+    # product4 = Product.objects.create(name='DELL', description='QLED', category=category2, price='120000')
+# product = Product.objects.get(name='Infinix')
+# print(product.name, product.price)
+# product.price = 1000
+# product.save()
+# print(product.name, product.price)
+# python loaddata catalog_fixture.json
