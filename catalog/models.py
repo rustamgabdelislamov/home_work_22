@@ -65,12 +65,12 @@ class Product(models.Model):
             "price",
         ]
 
-    # product4 = Product.objects.create(name='DELL', description='QLED', category=category2, price='120000')
 
+class Contacts(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    message = models.TextField()
 
-# product = Product.objects.get(name='Infinix')
-# print(product.name, product.price)
-# product.price = 1000
-# product.save()
-# print(product.name, product.price)
-# python manage.py loaddata catalog_fixture.json
+    def __str__(self):
+        return self.name

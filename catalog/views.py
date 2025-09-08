@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Product
+from .models import Product, Contacts
 
 
 def home(request):# Выборка последних 5 созданных продуктов
@@ -19,5 +19,7 @@ def contacts(request):
         name = request.POST.get("name")
         phone = request.POST.get("phone")
         message = request.POST.get("message")
+        # Создаем новый объект Contact и сохраняем его в базу данных
+        Contacts.objects.create(name=name, phone=phone, message=message)
         return HttpResponse(f"Спасибо, {name}! Сообщение получено.")
     return render(request, "catalog/contacts.html")
