@@ -1,26 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .models import Product, Contacts
-
-
-def home(request):  # Выборка последних 5 созданных продуктов
-    latest_products = Product.objects.order_by("-created_at")[:5]
-
-    # Вывод продуктов в консоль
-    for product in latest_products:
-        print(product.name)
-
-    # Передача продуктов в шаблон
-    return render(request, "catalog/home.html", {"latest_products": latest_products})
-def home(request):# Выборка последних 5 созданных продуктов
-    latest_products = Product.objects.order_by('-created_at')[:5]
-
-    # Вывод продуктов в консоль
-    for product in latest_products:
-        print(product.name)
-
-    # Передача продуктов в шаблон
-    return render(request, 'catalog/home.html', {'latest_products': latest_products})
+from .forms import ProductForm
+from django.core.paginator import Paginator
 
 
 def contacts(request):
@@ -32,3 +14,33 @@ def contacts(request):
         Contacts.objects.create(name=name, phone=phone, message=message)
         return HttpResponse(f"Спасибо, {name}! Сообщение получено.")
     return render(request, "catalog/contacts.html")
+
+
+def home(request):
+    products = Product.objects.all()
+    paginator = Paginator(products, 3)  # 10 товаров на страницу
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'catalog/home.html', {'page_obj': page_obj})
+
+
+def product_detail(request, pk):
+    product = get_object_or_404(Product,pk=pk)
+    context = {"product": product}
+    return render(request, "catalog/product_detail.html", context)
+
+
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('catalog:home')
+    else:
+        form = ProductForm()
+    return render(request, 'catalog/add_product.html', {'form': form})
+
+
+
+
+
