@@ -5,7 +5,7 @@
 <h1>Blog Posts</h1>
 <div class="container">
     <div class="row text-center">
-        <div class="col-4">
+        <div class="col-12">
             <img src="{{ blog.preview | media_filter }}" class="img-fluid w-50">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
@@ -14,7 +14,8 @@
                 <div class="card-body">
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                         <li>{{ blog.content }}</li>
-                        <li>Дата создания {{ blog.created_at }}</li>
+                        <li>Дата создания: {{ blog.created_at }}</li>
+                        <li>Просмотров: {{ blog.views_counter }}</li>
                     </ul>
                     <button type="button" class="btn btn-lg btn-block btn-outline-primary" onclick="location.href='{% url 'blog:blog_list' %}'">Назад</button>
                 </div>
