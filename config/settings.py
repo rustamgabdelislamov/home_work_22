@@ -18,8 +18,15 @@ load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mail.ru' # Или ваш SMTP-сервер
+EMAIL_PORT = 465             # Или 465 для SSL
+EMAIL_USE_TLS = True         # Или EMAIL_USE_SSL = True для 465
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') # Для Gmail используйте пароль приложения
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER') # Отправитель по умолчанию
+SERVER_EMAIL = os.getenv('EMAIL_HOST_USER') # Для ошибок сервера
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -136,4 +143,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-DEFAULT_FROM_EMAIL = 'hrustam911@mail.ru'
+

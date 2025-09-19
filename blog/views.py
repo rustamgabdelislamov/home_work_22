@@ -1,5 +1,4 @@
 from django.core.mail import send_mail
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
@@ -31,8 +30,12 @@ class BlogDetailView(DetailView):
                 f'Привет!\n\n'
                 f'Мы рады сообщить, что ваша статья "{self.object.title}" ')
             from_email = settings.DEFAULT_FROM_EMAIL
-            recipient_list = [self.object.email]
-            send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+            recipient_list = ['hrustam911@mail.ru']
+            try:
+                send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+                print(f"Письмо успешно отправлено от {from_email} получателям: {', '.join(recipient_list)}")
+            except Exception as e:
+                print(f"Ошибка при отправке письма: {e}")
 
         return self.object
 
@@ -40,7 +43,7 @@ class BlogDetailView(DetailView):
 
 class BlogCreateView(CreateView):
     model = Blog
-    fields = ['title', 'content', 'preview', 'is_published', 'views_counter']
+    fields = ['title', 'content', 'preview', 'is_published', 'views_counter', 'author_email']
     success_url = reverse_lazy('blog:blog_list')
 
 

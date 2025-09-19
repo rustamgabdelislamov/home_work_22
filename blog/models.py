@@ -1,5 +1,8 @@
 from django.db import models
 
+from config import settings
+
+
 class Blog(models.Model):
     title = models.CharField(
         max_length=100,
@@ -30,6 +33,13 @@ class Blog(models.Model):
         default=0,
         verbose_name="Счетчик просмотров",
         help_text="Укажите количество просмотров",
+    )
+    author_email = models.EmailField(
+        default=settings.DEFAULT_FROM_EMAIL,
+        verbose_name="Email адрес",
+        help_text="Введите email адрес",
+        blank=True,
+        null=True,
     )
 
     def __str__(self):
