@@ -5,7 +5,7 @@
 
 <div class="container">
     <div class="row text-center">
-    {% for product in page_obj %}
+    {% for product in product_list %}
         <div class="col-4">
             <img src="{{ product.image | media_filter }}" class="img-fluid w-50">
             <div class="card mb-4 box-shadow">
@@ -19,6 +19,8 @@
                         <li>Описание: {{ product.description | truncatechars:100 }}</li>
                     </ul>
                     <button type="button" class="btn btn-lg btn-block btn-outline-primary" onclick="location.href='{% url 'catalog:product_detail' product.pk %}'">Купить</button>
+                    <button type="button" class="btn btn-lg btn-block btn-outline-primary" onclick="location.href='{% url 'catalog:update_product' product.pk %}'">Редактировать</button>
+                    <button type="button" class="btn btn-lg btn-block btn-outline-danger" onclick="location.href='{% url 'catalog:delete_product' product.pk %}'">Удалить</button>
                 </div>
             </div>
         </div>
@@ -40,26 +42,4 @@
     </span>
 </div>
 
-<!--<div class="container">-->
-<!--    <div class="row text-center">-->
-<!--        {% for product in products %}-->
-<!--        <div class="col-4">-->
-<!--            <img src="{{ product.image | media_filter }}" class="img-fluid">-->
-<!--            <div class="card mb-4 box-shadow">-->
-<!--                <div class="card-header">-->
-<!--                    <h1 class="my-0 font-weight-normal">{{ product.name }}</h1>-->
-<!--                </div>-->
-<!--                <div class="card-body">-->
-<!--                    <h2 class="card-title pricing-card-title">{{ product.price }} руб.</h2>-->
-<!--                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">-->
-<!--                        <li>Категория: {{ product.category }}</li>-->
-<!--                        <li>Описание: {{ product.description | truncatechars:100 }}</li>-->
-<!--                    </ul>-->
-<!--                    <button type="button" class="btn btn-lg btn-block btn-outline-primary" onclick="location.href='{% url 'catalog:product_detail' product.pk %}'">Купить</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        {% endfor %}-->
-<!--    </div>-->
-<!--</div>-->
 {% endblock %}
