@@ -9,6 +9,7 @@ from unicodedata import category
 
 from .models import Product
 
+FORBIDDEN_WORDS = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
 
 class StyleFormMixin:
     def __init__(self, *args, **kwargs):
@@ -40,11 +41,11 @@ class ProductForm(StyleFormMixin,forms.ModelForm):
         name = cleaned_data.get('name')
         description = cleaned_data.get('description')
         category = cleaned_data.get('category')
-        forbidden_words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
+
         lower_name = name.lower()
         lower_description = description.lower()
 
-        if lower_name and lower_description and lower_name in forbidden_words or lower_description in forbidden_words:
+        if lower_name and lower_description and lower_name in FORBIDDEN_WORDS or lower_description in FORBIDDEN_WORDS:
             self.add_error('name', 'Недопустимые слова для имени или описания')
 
         if Product.objects.filter(name=name, category=category):
