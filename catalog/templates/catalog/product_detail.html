@@ -1,0 +1,25 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-12">
+            <img src="{{ product.image | media_filter }}" class="img-fluid w-50" >
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h1 class="my-0 font-weight-normal">{{ product.name }}</h1>
+                </div>
+                <div class="card-body">
+                    <h2 class="card-title pricing-card-title">{{ product.price }} руб.</h2>
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <li>Категория: {{ product.category }}</li>
+                        <li>Описание: {{ product.description }}</li>
+                    </ul>
+                    <button type="button" class="btn btn-lg btn-block btn-outline-primary" onclick="location.href='{% url 'catalog:product_list' %}'">Назад</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
