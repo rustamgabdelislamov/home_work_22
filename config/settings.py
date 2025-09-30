@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+
+from django.conf.global_settings import LOGIN_URL
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -150,3 +152,5 @@ AUTH_USER_MODEL = 'users.CustomUser'
 LOGOUT_REDIRECT_URL = 'logout'
 
 LOGIN_REDIRECT_URL = '/'
+
+LOGIN_URL = 'users:login'
