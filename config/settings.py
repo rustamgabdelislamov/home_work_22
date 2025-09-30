@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 
     "catalog",
     "blog",
+    "users"
 ]
 
 MIDDLEWARE = [
@@ -144,3 +145,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
+LOGOUT_REDIRECT_URL = 'logout'
+
+LOGIN_REDIRECT_URL = '/'

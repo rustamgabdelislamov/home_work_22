@@ -6,8 +6,8 @@ from users.forms import CustomUserCreationForm
 
 
 class CustomLogoutView(LogoutView):
-    template_name = 'users/logged_out.html'
-    next_page = reverse_lazy('logged_out')
+    template_name = 'users/logout.html'
+    next_page = reverse_lazy('users:logout')
 
 class RegisterView(CreateView):
     template_name = 'users/register.html'
