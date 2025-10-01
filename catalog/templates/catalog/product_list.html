@@ -18,9 +18,12 @@
                         <li>Категория: {{ product.category }}</li>
                         <li>Описание: {{ product.description | truncatechars:100 }}</li>
                     </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-outline-primary" onclick="location.href='{% url 'catalog:product_detail' product.pk %}'">Купить</button>
-                    <button type="button" class="btn btn-lg btn-block btn-outline-primary" onclick="location.href='{% url 'catalog:update_product' product.pk %}'">Редактировать</button>
+                    {% if user.is_authenticated %}
                     <button type="button" class="btn btn-lg btn-block btn-outline-danger" onclick="location.href='{% url 'catalog:delete_product' product.pk %}'">Удалить</button>
+                    <button type="button" class="btn btn-lg btn-block btn-outline-primary" onclick="location.href='{% url 'catalog:update_product' product.pk %}'">Редактировать</button>
+                    {% else %}
+                    <button type="button" class="btn btn-lg btn-block btn-outline-primary" onclick="location.href='{% url 'catalog:product_detail' product.pk %}'">Купить</button>
+                    {% endif %}
                 </div>
             </div>
         </div>
