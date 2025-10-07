@@ -1,6 +1,6 @@
 from django.contrib.auth.views import LogoutView
 from django.core.mail import send_mail
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView
 import os
 from dotenv import load_dotenv
@@ -12,7 +12,9 @@ load_dotenv()
 
 class CustomLogoutView(LogoutView):
     template_name = 'users/logout.html'
-    next_page = reverse_lazy('users:logout')
+    def get_redirect_url(self):
+        """Переопределяем, чтобы URL вычислялся при запросе."""
+        return reverse('users:logout')
 
 class RegisterView(CreateView):
     template_name = 'users/register.html'

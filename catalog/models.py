@@ -52,8 +52,6 @@ class Product(models.Model):
         CustomUser,
         on_delete=models.CASCADE,
         related_name="owners",
-        null=True,
-        blank=True,
     )
     price = models.IntegerField(verbose_name="Цена", help_text="Введите цену продукта")
     is_published = models.BooleanField(

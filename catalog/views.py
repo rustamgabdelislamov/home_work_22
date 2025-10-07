@@ -37,31 +37,32 @@ class CatalogCreateView(LoginRequiredMixin, CreateView):
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
 
+
     def form_valid(self, form):
         # 1. Проверяем, аутентифицирован ли пользователь
         if self.request.user.is_authenticated:
-            print(f"Попытка сохранить продукт для пользователя с ID: {self.request.user.pk}")
-
-            # 2. Устанавливаем владельца
             form.instance.owner = self.request.user
         else:
-            # Этого не должно случиться из-за LoginRequiredMixin, но на всякий случай
             raise PermissionDenied("User not authenticated.")
 
             # Сохраняем объект
         return super().form_valid(form)
 
 
-class CatalogUpdateView(LoginRequiredMixin, UpdateView):
+
+
+class CatalogUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
 
+    permission_required = 'catalog.can_unpublish_product'
+
     def get_form_class(self):
-        user = self.request.user
-        if user == self.object.owner:
-            return ProductForm
-        if user.has_perm("catalog.can_unpublish_product"):
+        user = self.request.user # Извлекает объект текущего аутентифицированного пользователя из объекта запроса (self.request), связанного с текущим представлением/контекстом. |
+        if user == self.object.owner: # Проверяет, совпадает ли текущий user с атрибутом owner объекта, который создается автоматически при создании продукта
+            return ProductForm #  если совпадает owner создателя, то полная форма для редактирования
+        if user.has_perm("catalog.can_unpublish_product"): # если только через разрешение, то неполная форма
             return ProductModeratorForm
         raise PermissionDenied
 
@@ -69,3 +70,21 @@ class CatalogUpdateView(LoginRequiredMixin, UpdateView):
 class CatalogDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:product_list')
+
+    permission_required = "catalog.delete_product"
+
+    def get_object(self, queryset=None):
+        """
+        Разрешает удаление, если пользователь является владельцем ИЛИ модератором.
+        """
+        obj = super().get_object(queryset)
+
+        # Проверка 1: Является ли пользователь владельцем объекта?
+        is_owner = (self.request.user == obj.owner)
+
+        # Проверка 2: Имеет ли пользователь право модератора?
+        has_moderator_permission = self.request.user.has_perm(self.permission_required)
+
+        if is_owner or has_moderator_permission:
+            return obj
+        raise PermissionDenied
