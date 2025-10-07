@@ -1,9 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from .forms import ProductForm
 from .models import Product, Contacts
 
 
@@ -25,22 +27,22 @@ class CatalogListView(ListView):
     paginate_by = 3
 
 
-class CatalogDetailView(DetailView):
+class CatalogDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
 
-class CatalogCreateView(CreateView):
+class CatalogCreateView(LoginRequiredMixin, CreateView):
     model = Product
-    fields = ['name', 'description', 'image', 'category', 'price']
+    form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
 
 
-class CatalogUpdateView(UpdateView):
+class CatalogUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
-    fields = ['name', 'description', 'image', 'category', 'price']
+    form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
 
 
-class CatalogDeleteView(DeleteView):
+class CatalogDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:product_list')

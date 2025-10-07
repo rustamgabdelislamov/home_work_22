@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+
+from django.conf.global_settings import LOGIN_URL
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -21,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mail.ru' # Или ваш SMTP-сервер
-EMAIL_PORT = 465             # Или 465 для SSL
+EMAIL_PORT = 2525            # Или 465 для SSL
 EMAIL_USE_TLS = True         # Или EMAIL_USE_SSL = True для 465
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') # Для Gmail используйте пароль приложения
@@ -52,6 +54,7 @@ INSTALLED_APPS = [
 
     "catalog",
     "blog",
+    "users"
 ]
 
 MIDDLEWARE = [
@@ -144,3 +147,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
+LOGOUT_REDIRECT_URL = 'logout'
+
+LOGIN_REDIRECT_URL = '/'
+
+LOGIN_URL = 'users:login'

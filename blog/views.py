@@ -1,7 +1,7 @@
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from config import settings
 from .models import Blog
 
@@ -15,7 +15,7 @@ class BlogListView(ListView):
         return queryset.filter(is_published=True)
 
 
-class BlogDetailView(DetailView):
+class BlogDetailView(LoginRequiredMixin, DetailView):
     model = Blog
 
     def get_object(self, queryset=None):
@@ -41,13 +41,13 @@ class BlogDetailView(DetailView):
 
 
 
-class BlogCreateView(CreateView):
+class BlogCreateView(LoginRequiredMixin, CreateView):
     model = Blog
     fields = ['title', 'content', 'preview', 'is_published', 'views_counter', 'author_email']
     success_url = reverse_lazy('blog:blog_list')
 
 
-class BlogUpdateView(UpdateView):
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
     model = Blog
     fields = ['title', 'content', 'preview', 'is_published', 'views_counter']
     success_url = reverse_lazy('blog:blog_list')
@@ -55,6 +55,6 @@ class BlogUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('blog:blog_detail', args=[self.kwargs.get('pk')])
 
-class BlogDeleteView(DeleteView):
+class BlogDeleteView(LoginRequiredMixin, DeleteView):
     model = Blog
     success_url = reverse_lazy('blog:blog_list')

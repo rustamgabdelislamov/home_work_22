@@ -29,7 +29,8 @@ class Product(models.Model):
         help_text="Введите наименование продукта",
     )
     description = models.TextField(
-        verbose_name="Описание", help_text="Введите описание продукта"
+        verbose_name="Описание",
+        help_text="Введите описание продукта"
     )
     image = models.ImageField(
         upload_to="catalog/image",
