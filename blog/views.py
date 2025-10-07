@@ -40,7 +40,6 @@ class BlogDetailView(LoginRequiredMixin, DetailView):
         return self.object
 
 
-
 class BlogCreateView(LoginRequiredMixin, CreateView):
     model = Blog
     fields = ['title', 'content', 'preview', 'is_published', 'views_counter', 'author_email']
@@ -54,6 +53,7 @@ class BlogUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('blog:blog_detail', args=[self.kwargs.get('pk')])
+
 
 class BlogDeleteView(LoginRequiredMixin, DeleteView):
     model = Blog

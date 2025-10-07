@@ -1,11 +1,12 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from .forms import ProductForm
+from .forms import ProductForm, ProductModeratorForm
 from .models import Product, Contacts
 
 
@@ -36,11 +37,33 @@ class CatalogCreateView(LoginRequiredMixin, CreateView):
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
 
+    def form_valid(self, form):
+        # 1. Проверяем, аутентифицирован ли пользователь
+        if self.request.user.is_authenticated:
+            print(f"Попытка сохранить продукт для пользователя с ID: {self.request.user.pk}")
+
+            # 2. Устанавливаем владельца
+            form.instance.owner = self.request.user
+        else:
+            # Этого не должно случиться из-за LoginRequiredMixin, но на всякий случай
+            raise PermissionDenied("User not authenticated.")
+
+            # Сохраняем объект
+        return super().form_valid(form)
+
 
 class CatalogUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
+
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
+        if user.has_perm("catalog.can_unpublish_product"):
+            return ProductModeratorForm
+        raise PermissionDenied
 
 
 class CatalogDeleteView(LoginRequiredMixin, DeleteView):

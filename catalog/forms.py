@@ -24,7 +24,7 @@ class StyleFormMixin:
 class ProductForm(StyleFormMixin,forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'image', 'category', 'price']
+        fields = ['name', 'description', 'image', 'category', 'price', 'is_published']
 
 
     # def __init__(self, *args, **kwargs):
@@ -81,3 +81,9 @@ class ProductForm(StyleFormMixin,forms.ModelForm):
                 raise ValidationError(f'Можно загружать только файлы формата {", ".join(allowed_extensions)}')
 
         return image
+
+
+class ProductModeratorForm(StyleFormMixin,forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['is_published']
