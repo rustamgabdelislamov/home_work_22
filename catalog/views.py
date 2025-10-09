@@ -39,16 +39,11 @@ class CatalogCreateView(LoginRequiredMixin, CreateView):
 
 
     def form_valid(self, form):
-        # 1. Проверяем, аутентифицирован ли пользователь
-        if self.request.user.is_authenticated:
-            form.instance.owner = self.request.user
-        else:
-            raise PermissionDenied("User not authenticated.")
+        """Присваиваем при создании продукта id создателя"""
 
+        form.instance.owner = self.request.user
             # Сохраняем объект
         return super().form_valid(form)
-
-
 
 
 class CatalogUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
