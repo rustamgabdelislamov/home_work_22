@@ -4,8 +4,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db.models import BooleanField
-from django.template.defaultfilters import lower
-from unicodedata import category
+
 
 from .models import Product
 
@@ -24,16 +23,7 @@ class StyleFormMixin:
 class ProductForm(StyleFormMixin,forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'image', 'category', 'price']
-
-
-    # def __init__(self, *args, **kwargs):
-    #     super(ProductForm, self).__init__(*args, **kwargs)
-    #     self.fields['name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите имя'})
-    #     self.fields['description'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите описание'})
-    #     self.fields['image'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Загрузите изображение'})
-    #     self.fields['category'].widget.attrs.update({'class': 'form-control'})
-    #     self.fields['price'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Укажите цену'})
+        fields = ['name', 'description', 'image', 'category', 'price', 'is_published']
 
 
     def clean(self):
@@ -81,3 +71,9 @@ class ProductForm(StyleFormMixin,forms.ModelForm):
                 raise ValidationError(f'Можно загружать только файлы формата {", ".join(allowed_extensions)}')
 
         return image
+
+
+class ProductModeratorForm(StyleFormMixin,forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['is_published']
