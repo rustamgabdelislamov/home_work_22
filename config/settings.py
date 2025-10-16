@@ -163,6 +163,6 @@ if CACHE_ENABLED:
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-            'LOCATION': 'redis://{REDIS_HOST}:{REDIS_PORT}/1',
+            'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/1',
         }
     }
