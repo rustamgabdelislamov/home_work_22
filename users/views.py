@@ -15,11 +15,6 @@ def logout_view(request):
     logout(request)
     return redirect("/")
 
-# class CustomLogoutView(LogoutView):
-#     template_name = 'users/logout.html'
-#     # def get_redirect_url(self):
-#     #     """Переопределяем, чтобы URL вычислялся при запросе."""
-#     #     return reverse('users:logout')
 
 class RegisterView(CreateView):
     template_name = 'users/register.html'

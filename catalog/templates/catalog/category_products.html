@@ -1,11 +1,17 @@
-{% extends 'catalog/base.html' %}
+﻿{% extends 'catalog/base.html' %}
 {% load my_tags %}
 {% block title %}Каталог{% endblock %}
 {% block content %}
 
+{% if category %}
+    <h1>Продукты в категории: {{ category.name }}</h1>
+{% else %}
+    <h1>Список продуктов (Категория не найдена или ID отсутствует)</h1>
+{% endif %}
+
 <div class="container">
     <div class="row text-center">
-    {% for product in product_list %}
+    {% for product in category_products %}
         <div class="col-4">
             <img src="{{ product.image | media_filter }}" class="img-fluid w-50">
             <div class="card mb-4 box-shadow">
@@ -15,7 +21,6 @@
                 <div class="card-body">
                     <h2 class="card-title pricing-card-title">{{ product.price }} руб.</h2>
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                        Категория: <a href="{% url 'catalog:category_product' product.category.id %}">{{ product.category.name }}</a>
                         <li>Описание: {{ product.description | truncatechars:100 }}</li>
                     </ul>
                     {% if perms.product.can_unpublish_product or user == product.owner %}

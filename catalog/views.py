@@ -1,13 +1,16 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
+from django.core.cache import cache
 from .forms import ProductForm, ProductModeratorForm
-from .models import Product, Contacts
+from .models import Product, Contacts, Category
+from .services import get_products_and_category_by_id
 
 
 class CatalogContactsView(View):
@@ -27,7 +30,66 @@ class CatalogListView(ListView):
     model = Product
     paginate_by = 3
 
+    def get_queryset(self):
+        # Получаем номер текущей страницы из GET-параметров
+        page_number = self.request.GET.get('page', 1)
+        cache_key = f'product_list_page_{page_number}'
 
+        queryset = cache.get(cache_key)
+
+        if not queryset:
+            queryset = super().get_queryset()
+            # Кэшируем данные, специфичные для этой страницы
+            cache.set(cache_key, queryset, 60 * 15)  # 15 минут
+
+        return queryset
+
+class CategoryProductList(ListView):
+    model = Product
+    template_name = "catalog/category_products.html"
+    context_object_name = 'category_products'
+
+    category_id = None
+
+    def setup(self, request, *args, **kwargs):
+        """Вызывается перед dispatch. Устанавливаем category_id."""
+        super().setup(request, *args, **kwargs)
+        self.category_id = self.kwargs.get('category_id')
+
+    def get_queryset(self):
+        """
+        Теперь использует сервисный слой для получения продуктов.
+        Если категория не найдена, возвращает пустой QuerySet.
+        """
+        if not self.category_id:
+            return Product.objects.none()
+
+        try:
+            products, _ = get_products_and_category_by_id(self.category_id)
+            return products
+        except ValueError:
+            # Если сервис выбросил ошибку (категория не найдена)
+            return Product.objects.none()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # 3. Получаем объект категории и добавляем его в контекст
+        category_instance = None
+        if self.category_id:
+            try:
+                # Пытаемся найти категорию
+                category_instance = Category.objects.get(id=self.category_id)
+            except Category.DoesNotExist:
+                # Если категория не найдена (что соответствует вашему сообщению в шаблоне)
+                pass
+
+        context['category'] = category_instance
+
+        # context['category_products'] уже установлен ListView
+        return context
+
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class CatalogDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
